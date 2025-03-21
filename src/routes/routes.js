@@ -278,6 +278,27 @@ router.put('/ticket/put/:id', async (req, res) =>{
     
 });
 
+
+router.put('/ticket/put/decline/:id', async (req, res) =>{
+    const { id } = req.params;
+    const { status, comentario } = req.body;
+
+    try{
+        const ticketUpdate =  await ticketSchema.updateOne({ ticket: id}, { $set: {status, comentario} });
+
+        if(ticketUpdate.nModified === 0){
+            return res.status(404).json({ message: "ticket no actualizado"});
+        }
+
+        res.status(200).json({ message: "ticket actualizado existosamente"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error durante la actualizacion", error: error.message});
+    }
+    
+});
+
+
 // Delete a User
 router.delete('/ticket/:ticket', async (req, res) => {
     const { ticket } = req.params;
